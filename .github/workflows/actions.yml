@@ -1,0 +1,43 @@
+name: Super-Linter
+
+on: push
+
+jobs:
+  super-lint:
+    name: Lint code base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Run Super-Linter
+        uses: github/super-linter@v3.17.0
+        env:
+          DEFAULT_BRANCH: main
+
+  laravel-testing:
+    name: Laravel unit and integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Laravel Test Action
+        uses: hdev14/laravel-test-action@v1
+        
+  laravel-deploy-and-migrate:
+    name: Laravel Deploy and Migrate DB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+        with: 
+          php-version: '8.1'
+      
+      - name: Setup Environment
+        uses: shivammathur/setup-php@v2
+            
+      - name: Speed up the packages installation process
+        run: composer global require hirak/prestissimo
+        
+      - name: Install Packages
+        run: composer install --no-dev
+        
+    
